@@ -11,13 +11,13 @@ package javafall2017test;
  */
 public class Javafall2017test 
 {
-
+    
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) 
     {
-        // TODO code application logic here
+        System.out.println("bye");
     }
     
 }

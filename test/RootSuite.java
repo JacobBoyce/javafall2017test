@@ -16,7 +16,7 @@ import org.junit.runners.Suite;
  * @author jboyce
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({javafall2017test.Javafall2017testITSuite.class})
+//@Suite.SuiteClasses({javafall2017test.Javafall2017testITSuite.class})
 public class RootSuite {
 
     @BeforeClass

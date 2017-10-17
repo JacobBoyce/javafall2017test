@@ -19,6 +19,7 @@ public class Javafall2017 {
     
     public void main(String[] args) 
     {
+        int i = 0;
         Javafall2017 app = new Javafall2017();
         app.run();
     }

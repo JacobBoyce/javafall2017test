@@ -40,9 +40,7 @@ public class javafall2017test {
     }
 
 
-    /**
-     * Test of Input method, of class Hmwk2.
-     */
+/*
     @Test
     public void testInput_Scanner() {
         Javafall2017 app = new Javafall2017();
@@ -63,24 +61,14 @@ public class javafall2017test {
         assertEquals(false,app.inRange(1001));
         assertEquals(true,app.inRange(100));
     }  
-    
+    */
     @Test
-    public void testIsLessThan() {
+    public void testIsEven() {
         Javafall2017 app = new Javafall2017();
-        assertEquals(false,app.isLessThan(4, 3));
-        assertEquals(true,app.isLessThan(11, 15));
-    } 
-    
-    @Test
-    public void testDoMath()
-    {
-        Javafall2017 app = new Javafall2017();
-        int r1, r2, s;
-        r1 = 4;
-        s = 3;
-        r2 = 2;
-        
-        assertEquals(r2, app.doMath(r1, s));
-       
-    }
+        assertEquals(true,app.isEven(14));
+        assertEquals(true,app.isEven(40));
+        assertEquals(false,app.isEven(67));
+        assertEquals(true,app.isEven(-28));
+        assertEquals(false,app.isEven(-23));
+    }    
 }

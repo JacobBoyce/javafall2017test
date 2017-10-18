@@ -39,29 +39,6 @@ public class javafall2017test {
     public void tearDown() {
     }
 
-
-/*
-    @Test
-    public void testInput_Scanner() {
-        Javafall2017 app = new Javafall2017();
-        Scanner in = new Scanner("11 15");
-        int[] expResult = new int[2];
-
-        expResult = app.Input(in);
-        assertEquals(expResult[0], 11);
-        assertEquals(expResult[1], 15);
-    }
-    
-    @Test
-    public void testInRange() {
-        Javafall2017 app = new Javafall2017();
-        assertEquals(false,app.inRange(-1001));
-        assertEquals(true,app.inRange(-1000));
-        assertEquals(true,app.inRange(1000));
-        assertEquals(false,app.inRange(1001));
-        assertEquals(true,app.inRange(100));
-    }  
-    */
     @Test
     public void testIsEven() {
         Javafall2017 app = new Javafall2017();

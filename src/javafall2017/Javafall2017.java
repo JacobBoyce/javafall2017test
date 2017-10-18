@@ -17,81 +17,47 @@ public class Javafall2017 {
      * @param args the command line arguments
      */
     
-    public void main(String[] args) 
+    public static void main(String[] args) 
     {
-        int i = 0;
         Javafall2017 app = new Javafall2017();
         app.run();
     }
     
     public void run() 
     {
-        int r1, r2, s;
-        int[] num = new int[2];
-        
-        num = Input();
-        r1 = num[0];
-        s = num[1];
-        
-        r2 = doMath(r1, s);
-        Output(r2);
+        System.out.println(isEvenOdd(2));
+        System.out.println(isEvenOdd(10));
+        System.out.println(isEvenOdd(15));
+        System.out.println(isEvenOdd(-2));
+        System.out.println(isEvenOdd(-15));
     }
     
-    public int[] Input(Scanner in) 
+    public String isEvenOdd(int num)
     {
-        String input = in.nextLine(); 
-        String[] numbers = input.split(" ");
-        int[] rNumbers = new int[numbers.length];
-        for(int i = 0; i < numbers.length; i++)
+        boolean iseven = isEven(num);
+        if(iseven == true)
         {
-            rNumbers[i] = Integer.parseInt(numbers[i]);
+            return num + " is even";
         }
-        return rNumbers;
+        else if(iseven == false)
+        {
+            return num + " is odd";
+        }
+        else
+        {
+            return "Cant tell what " + num + " is";
+        }
     }
     
-    public int[] Input()
+    public boolean isEven(int num)
     {
-        Scanner in = new Scanner(System.in);
-        return Input(in);
-    }
-    
-    boolean inRange(int value) 
-    {
-        if(value >= -1000 && value <= 1000) {
-            return true;
-        }
-        return false;
-    }
-    boolean isLessThan(int r1, int s)
-    {
-        if(r1 < s)
+        int temp = 0;
+        temp = num % 2;
+        
+        if(temp == 0)
         {
             return true;
         }
         return false;
-    }
-    
-    public int doMath(int r1, int s)
-    {
-        int r2;
-        if(inRange(r1) && inRange(s))
-        {
-            if(isLessThan(r1, s))
-            {
-                r2 = s + (s - r1);
-                return r2;
-            }
-            else
-            {
-                r2 = s - (r1 - s);
-                return r2;
-            }
-        }
-        return 0;
-    }
-    
-    public void Output(int output)
-    {
-        System.out.println(output);       
     }
 }

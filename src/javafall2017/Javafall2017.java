@@ -5,7 +5,16 @@
  */
 package javafall2017;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.HashMap;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -13,51 +22,159 @@ import java.util.Scanner;
  */
 public class Javafall2017 {
 
-    /**
-     * @param args the command line arguments
-     */
-    
-    public static void main(String[] args) 
-    {
-        Javafall2017 app = new Javafall2017();
-        app.run();
+     public static void main(String[] args) {
+        new Javafall2017().run();
+    }
+
+    private Connection connection = null;
+
+    public Connection getConnection() {
+        if (connection == null) {
+            synchronized (this) {
+                if (connection == null) {
+                    try {
+                        connection = DriverManager.getConnection("jdbc:sqlite:javafall2017.db");
+                    } catch (SQLException ex) {
+                        Logger.getLogger(Javafall2017.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        }
+        return connection;
+    }
+
+    private HashMap< String, PreparedStatement> preparedStatementCache = null;
+    public static final int SQL_STATEMENT_TIMEOUT_SECONDS = 10;
+
+    public PreparedStatement getPreparedStatement(String sql) {
+        if (preparedStatementCache == null) {
+            synchronized (this) {
+                if (preparedStatementCache == null) {
+                    preparedStatementCache = new HashMap< String, PreparedStatement>();
+                }
+            }
+        }
+
+        PreparedStatement preparedStatement = preparedStatementCache.get(sql);
+        if (preparedStatement == null) {
+            synchronized (this) {
+                preparedStatement = preparedStatementCache.get(sql);
+                if (preparedStatement == null) {
+                    try {
+                        Connection connection = getConnection();
+                        int keyMode = sql.startsWith("insert")
+                                ? Statement.RETURN_GENERATED_KEYS : Statement.NO_GENERATED_KEYS;
+
+                        preparedStatement
+                                = connection.prepareStatement(sql, keyMode);
+                        preparedStatement.setQueryTimeout(SQL_STATEMENT_TIMEOUT_SECONDS);
+                        preparedStatementCache.put(sql, preparedStatement);
+                    } catch (SQLException ex) {
+                        Logger.getLogger(Javafall2017.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
+                }
+            }
+        }
+        return preparedStatement;
+    }
+
+    ResultSet sql(String sql, Object... objects) {
+        try {
+            PreparedStatement preparedStatement = getPreparedStatement(sql);
+            int index = 1;
+            for (Object object : objects) {
+                if (object instanceof Boolean) {
+                    preparedStatement.setBoolean(index, (Boolean) object);
+                } else if (object instanceof Integer) {
+                    preparedStatement.setInt(index, (Integer) object);
+                } else if (object instanceof Long) {
+                    preparedStatement.setLong(index, (Long) object);
+                } else if (object instanceof String) {
+                    preparedStatement.setString(index, (String) object);
+                } else {
+                    throw new IllegalStateException("can't set type " + object.getClass().getName());
+                }
+                ++index;
+            }
+            if (sql.startsWith("insert")) {
+                preparedStatement.execute();
+                ResultSet resultSet = preparedStatement.getGeneratedKeys();
+                return resultSet;
+            } else {
+                ResultSet resultSet = preparedStatement.executeQuery();
+                return resultSet;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Javafall2017.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
     
-    public void run() 
-    {
-        System.out.println(isEvenOdd(2));
-        System.out.println(isEvenOdd(10));
-        System.out.println(isEvenOdd(15));
-        System.out.println(isEvenOdd(-2));
-        System.out.println(isEvenOdd(-15));
+    Long longResult(ResultSet resultSet) {
+        try {
+            if (resultSet != null && resultSet.next()) return resultSet.getLong(1);
+        } catch (SQLException ex) {
+            Logger.getLogger(Javafall2017.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
     
-    public String isEvenOdd(int num)
-    {
-        boolean iseven = isEven(num);
-        if(iseven == true)
-        {
-            return num + " is even";
+    String stringResult(ResultSet resultSet) {
+        try {
+            if (resultSet != null && resultSet.next()) return resultSet.getString(1);
+        } catch (SQLException ex) {
+            Logger.getLogger(Javafall2017.class.getName()).log(Level.SEVERE, null, ex);
         }
-        else if(iseven == false)
-        {
-            return num + " is odd";
+        return null;
+    }
+
+    private Statement statement = null;
+
+    public Statement getStatement() {
+        if (statement == null) {
+            synchronized (this) {
+                if (statement == null) {
+                    try {
+                        Connection connection = getConnection();
+                        statement = connection.createStatement();
+                        statement.setQueryTimeout(SQL_STATEMENT_TIMEOUT_SECONDS);
+                    } catch (SQLException ex) {
+                        Logger.getLogger(Javafall2017.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
         }
-        else
-        {
-            return "Cant tell what " + num + " is";
+        return statement;
+    }
+
+    void sql(String command) {
+        try {
+            Statement statement = getStatement();
+            statement.executeUpdate(command);
+        } catch (SQLException ex) {
+            Logger.getLogger(Javafall2017.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+    void reset() {
+        sql("drop table if exists person");
+        sql("create table person (id integer primary key, name string)");
+    }
     
-    public boolean isEven(int num)
-    {
-        int temp = 0;
-        temp = num % 2;
-        
-        if(temp == 0)
-        {
-            return true;
-        }
-        return false;
+    long insertPerson(String name) {
+        return longResult(sql("insert into person (name) values (?)",name));
+    }
+
+    String getPerson(long id) {
+        return stringResult(sql("select name from person where id=?",id));
+    }
+
+    void run() {
+        reset();
+        long aliceId = insertPerson(" alice ");
+        System.out.println("aliceId = " + aliceId);
+        long bobId = insertPerson("bob");
+        System.out.println("alice name = " + getPerson(aliceId));
     }
 }

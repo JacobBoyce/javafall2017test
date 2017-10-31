@@ -16,6 +16,8 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.sql.*;
+
+
 /**
  *
  * @author Jacob
@@ -84,7 +86,8 @@ public class Javafall2017 {
         }
     }
       
-      public void PrintTable(){
+      public void PrintTable()
+      {
         String sql = "SELECT candyName, candyAmount FROM candyBag";
         try (Connection connection = getConnection()){
             Statement statement = connection.createStatement();
@@ -97,7 +100,7 @@ public class Javafall2017 {
         } catch (SQLException e){
             Logger.getLogger(Javafall2017.class.getName()).log(Level.SEVERE, null, e);
         }
-    }
+      }
       
       public void run()
       {

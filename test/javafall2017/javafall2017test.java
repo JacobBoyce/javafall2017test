@@ -40,12 +40,21 @@ public class javafall2017test {
     }
 
     @Test
-    public void testIsEven() {
+    public void CreateNewDatabaseTest() {
         Javafall2017 app = new Javafall2017();
-        assertEquals(true,app.isEven(14));
-        assertEquals(true,app.isEven(40));
-        assertEquals(false,app.isEven(67));
-        assertEquals(true,app.isEven(-28));
-        assertEquals(false,app.isEven(-23));
-    }    
+        app.createNewDatabase();
+    }
+    
+    @Test
+    public void CreateNewTableTest() {
+        Javafall2017 app = new Javafall2017();
+        app.createNewTable();
+    }
+    
+    @Test
+    public void InsertTest() {
+        Javafall2017 app = new Javafall2017();
+        app.insert("sour patch", 5);
+        app.PrintTable();
+    }
 }

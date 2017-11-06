@@ -38,23 +38,4 @@ public class javafall2017test {
     @After
     public void tearDown() {
     }
-
-    @Test
-    public void CreateNewDatabaseTest() {
-        Javafall2017 app = new Javafall2017();
-        app.createNewDatabase();
-    }
-    
-    @Test
-    public void CreateNewTableTest() {
-        Javafall2017 app = new Javafall2017();
-        app.createNewTable();
-    }
-    
-    @Test
-    public void InsertTest() {
-        Javafall2017 app = new Javafall2017();
-        app.insert("sour patch", 5);
-        app.PrintTable();
-    }
 }

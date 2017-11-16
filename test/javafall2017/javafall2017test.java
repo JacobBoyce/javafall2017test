@@ -5,6 +5,8 @@
  */
 package javafall2017;
 
+import java.util.ArrayList;
+import java.util.List;
 import javafall2017.Javafall2017;
 import java.util.Scanner;
 import org.junit.After;
@@ -40,12 +42,12 @@ public class javafall2017test {
     }
 
     @Test
-    public void testIsEven() {
+    public void test() {
         Javafall2017 app = new Javafall2017();
-        assertEquals(true,app.isEven(14));
-        assertEquals(true,app.isEven(40));
-        assertEquals(false,app.isEven(67));
-        assertEquals(true,app.isEven(-28));
-        assertEquals(false,app.isEven(-23));
-    }    
+        List<String> names = new ArrayList<>();
+        app.AddName(names, "Jacob");
+        assertEquals(true, names.contains("Jacob"));
+        app.RemoveName(names, "Jacob");
+        assertEquals(false, names.contains("Jacob"));
+    }
 }

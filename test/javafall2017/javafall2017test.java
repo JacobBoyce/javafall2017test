@@ -42,12 +42,36 @@ public class javafall2017test {
     }
 
     @Test
-    public void test() {
+    public void testContains() 
+    {
         Javafall2017 app = new Javafall2017();
-        List<String> names = new ArrayList<>();
-        app.AddName(names, "Jacob");
-        assertEquals(true, names.contains("Jacob"));
-        app.RemoveName(names, "Jacob");
-        assertEquals(false, names.contains("Jacob"));
+        assertEquals(true ,app.Contains("jacob"));
+    }
+    
+    @Test
+    public void testGetQuantity() 
+    {
+        Javafall2017 app = new Javafall2017();
+        assertEquals(4 ,app.GetQuantity("jacob"));
+    }
+    
+    @Test
+    public void testInsertAndDelete() 
+    {
+        Javafall2017 app = new Javafall2017();
+        if(app.Contains("jill") == true)
+        {
+            app.Delete("jill");
+            assertEquals(false ,app.Contains("jill"));
+            app.Insert("jill", 1, 999);
+            assertEquals(true ,app.Contains("jill"));
+        }
+        else
+        {
+            app.Insert("jill", 1, 999);
+            assertEquals(true ,app.Contains("jill"));
+            app.Delete("jill");
+            assertEquals(false ,app.Contains("jill"));
+        }  
     }
 }
